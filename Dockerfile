@@ -34,7 +34,7 @@ FROM mcr.microsoft.com/dotnet/runtime-deps:6.0-alpine-amd64
 # 使用 HTTPS 协议访问容器云调用证书安装
 RUN apk add ca-certificates
 
-# RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositories
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositories
 WORKDIR /app
 COPY --from=build /app ./
 
