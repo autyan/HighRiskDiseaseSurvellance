@@ -6,10 +6,22 @@ WORKDIR /source
 # copy csproj and restore as distinct layers
 COPY *.sln .
 COPY aspnetapp/*.csproj ./aspnetapp/
+COPY HighRiskDiseaseSurvellance.Aplication/*.csproj ./HighRiskDiseaseSurvellance.Aplication/
+COPY HighRiskDiseaseSurvellance.Domain/*.csproj ./HighRiskDiseaseSurvellance.Domain/
+COPY HighRiskDiseaseSurvellance.Dto/*.csproj ./HighRiskDiseaseSurvellance.Dto/
+COPY HighRiskDiseaseSurvellance.Infrastructure/*.csproj ./HighRiskDiseaseSurvellance.Infrastructure/
+COPY HighRiskDiseaseSurvellance.Persistence/*.csproj ./HighRiskDiseaseSurvellance.Persistence/
+COPY OAuth.Adapter.WeChat/*.csproj ./OAuth.Adapter.WeChat/
 RUN dotnet restore -r linux-musl-x64 /p:PublishReadyToRun=true
 
 # copy everything else and build app
 COPY aspnetapp/. ./aspnetapp/
+COPY HighRiskDiseaseSurvellance.Aplication/. ./HighRiskDiseaseSurvellance.Aplication/
+COPY HighRiskDiseaseSurvellance.Domain/. ./HighRiskDiseaseSurvellance.Domain/
+COPY HighRiskDiseaseSurvellance.Dto/. ./HighRiskDiseaseSurvellance.Dto/
+COPY HighRiskDiseaseSurvellance.Infrastructure/. ./HighRiskDiseaseSurvellance.Infrastructure/
+COPY HighRiskDiseaseSurvellance.Persistence/. ./HighRiskDiseaseSurvellance.Persistence/
+COPY OAuth.Adapter.WeChat/. ./OAuth.Adapter.WeChat/
 WORKDIR /source/aspnetapp
 RUN dotnet publish -c release -o /app -r linux-musl-x64 --self-contained true --no-restore /p:PublishTrimmed=true /p:PublishReadyToRun=true /p:PublishSingleFile=true
 
