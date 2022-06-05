@@ -1,0 +1,155 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "注册用户管理";
+}
+
+@section style{
+    <link rel="stylesheet" href="~/lib/DataTables/datatables.min.css"/>
+    <style type="text/css">
+        img.avatar {
+            height: 40px;
+            width: 40px;
+        }
+         
+    </style>
+}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">注册用户管理</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">用户管理</a></li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">搜索条件</div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="usernickname">用户昵称</label><input class="form-control" id="usernickname" placeholder="用户昵称" value=""/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="isDistributor">是否推广员</label>
+                                    <select class="form-control" id="isDistributor">
+                                        <option></option>
+                                        <option value="true">是</option>
+                                        <option value="false">否</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-11"></div>
+                                <div class="col-md-1">
+                                    <button type="button" class="btn btn-primary" id="startSearch">查询</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">已注册用户列表</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <table id="users" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>昵称</th>
+                                    <th>头像</th>
+                                    <th>是否推广员</th>
+                                    <th>操作</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /.content -->
+</div>
+@section script
+{
+    <script src="~/lib/DataTables/datatables.min.js"></script>
+    <script>
+        $('#startSearch').click(function() {
+            $('#users').DataTable().ajax.reload();
+        });
+        $('#users').DataTable({
+            "serverSide":true,
+            "searching":false,
+            ajax: {
+                "url":'/api/User',
+                "data":function(d) {
+                    d.nickName = $('#usernickname').val();
+                    d.isDistributor = $('#isDistributor').val();
+                }
+            },
+            "columns": [{ "data": "id" }, { "data": "nickName" }, 
+                {"data":"avatarUrl","render": function(data, type, row, meta) {
+                    return '<img class="avatar" src="' + data + '">';
+                }}, {"data":"isDistributor","render":function(data, type, row, meta) {
+                    if (!data) {
+                        return '非推广员';
+                    }
+                    return '推广员';
+                }},
+                {"data":null,"render":function(data, type, row, meta) {
+                    var html = '<a class="btn btn-primary" href="Record?userId=' + row.id + '" >健康记录</a>';
+                    return html;
+                }}],
+            language: {
+                "sProcessing": "处理中...",
+                "sLengthMenu": "显示 _MENU_ 项结果",
+                "sZeroRecords": "没有匹配结果",
+                "sInfo": "显示第 _START_ 至 _END_ 项结果，共 _TOTAL_ 项",
+                "sInfoEmpty": "显示第 0 至 0 项结果，共 0 项",
+                "sInfoFiltered": "(由 _MAX_ 项结果过滤)",
+                "sInfoPostFix": "",
+                "sSearch": "搜索:",
+                "sUrl": "",
+                "sEmptyTable": "表中数据为空",
+                "sLoadingRecords": "载入中...",
+                "sInfoThousands": ",",
+                "oPaginate": {
+                    "sFirst": "首页",
+                    "sPrevious": "上页",
+                    "sNext": "下页",
+                    "sLast": "末页"
+                },
+                "oAria": {
+                    "sSortAscending": ": 以升序排列此列",
+                    "sSortDescending": ": 以降序排列此列"
+                }
+            }
+        });
+    </script>
+}

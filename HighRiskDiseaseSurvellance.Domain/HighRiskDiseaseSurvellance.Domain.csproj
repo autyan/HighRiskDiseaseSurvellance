@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\HighRiskDiseaseSurvellance.Dto\HighRiskDiseaseSurvellance.Dto.csproj" />
+    <ProjectReference Include="..\HighRiskDiseaseSurvellance.Infrastructure\HighRiskDiseaseSurvellance.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
