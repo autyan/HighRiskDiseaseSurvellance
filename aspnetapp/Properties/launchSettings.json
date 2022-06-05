@@ -25,11 +25,15 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
+        "JWT_EXPIRES": "120",
+        "JWT_SIGNINGKEY": "629ce5eead76885e860de1bb",
         "MYSQL_VERSION": "8.0.18-mysql",
         "MYSQL_PASSWORD": "aut#87yan@06%1200()",
         "MYSQL_DATABASE": "surveillance",
         "MYSQL_ADDRESS": "47.101.138.31:21540",
-        "MYSQL_USERNAME": "autyan"
+        "MYSQL_USERNAME": "autyan",
+        "JWT_AUDIENCE": "https:/dotnet-0ngd-1852816-1311435230.ap-shanghai.run.tcloudbase.com",
+        "JWT_ISSUER": "https:/dotnet-0ngd-1852816-1311435230.ap-shanghai.run.tcloudbase.com"
       },
       "applicationUrl": "https://localhost:5001;http://localhost:5000"
     }

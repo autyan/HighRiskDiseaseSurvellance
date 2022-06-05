@@ -62,7 +62,7 @@ try
                                                    option.Issuer     = Environment.GetEnvironmentVariable("JWT_ISSUER");
                                                    option.Audience   = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
                                                    option.SigningKey = Environment.GetEnvironmentVariable("JWT_SIGNINGKEY");
-                                                   int.TryParse(Environment.GetEnvironmentVariable("JWT_SIGNINGKEY"),
+                                                   int.TryParse(Environment.GetEnvironmentVariable("JWT_EXPIRES"),
                                                                 out var expires);
                                                    if (expires <= 0) expires = 120;
                                                    option.Expires = expires;
