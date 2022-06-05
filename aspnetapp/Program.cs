@@ -43,12 +43,35 @@ try
                                                        policyBuilder.AllowAnyOrigin();
                                                    });
                              });
-    var jwtSection = builder.Configuration.GetSection("jwt");
-    builder.Services.Configure<JwtOptions>(jwtSection);
+    string issuer;
+    string audience;
+    string signingKey;
     builder.Services.AddSingleton<ITokenProvider, JwtTokenProvider>();
-    var issuer     = jwtSection.GetValue<string>(nameof(JwtOptions.Issuer));
-    var audience   = jwtSection.GetValue<string>(nameof(JwtOptions.Audience));
-    var signingKey = jwtSection.GetValue<string>(nameof(JwtOptions.SigningKey));
+    if (builder.Environment.IsDevelopment())
+    {
+        var jwtSection = builder.Configuration.GetSection("jwt");
+        builder.Services.Configure<JwtOptions>(jwtSection);
+        issuer     = jwtSection.GetValue<string>(nameof(JwtOptions.Issuer));
+        audience   = jwtSection.GetValue<string>(nameof(JwtOptions.Audience));
+        signingKey = jwtSection.GetValue<string>(nameof(JwtOptions.SigningKey));
+    }
+    else
+    {
+        builder.Services.Configure<JwtOptions>(option =>
+                                               {
+                                                   option.Issuer     = Environment.GetEnvironmentVariable("JWT_ISSUER");
+                                                   option.Audience   = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+                                                   option.SigningKey = Environment.GetEnvironmentVariable("JWT_SIGNINGKEY");
+                                                   int.TryParse(Environment.GetEnvironmentVariable("JWT_SIGNINGKEY"),
+                                                                out var expires);
+                                                   if (expires <= 0) expires = 120;
+                                                   option.Expires = expires;
+                                               });
+        issuer     = Environment.GetEnvironmentVariable("JWT_ISSUER");
+        audience   = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
+        signingKey = Environment.GetEnvironmentVariable("JWT_SIGNINGKEY");
+    }
+    
     builder.Services.AddAuthentication(options =>
                                        {
                                            options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
