@@ -19,10 +19,11 @@ namespace aspnetapp.Controllers.Api
         }
 
         [HttpPost]
-        public Task<string> SubmitSurveillanceRecord([FromBody]SubmitRecordRequest request)
+        public async Task<BaseResponse<string>> SubmitSurveillanceRecord([FromBody]SubmitRecordRequest request)
         {
             request.UserId = UserId;
-            return _recordService.SubmitSurveillanceRecordAsync(request);
+            var recordId = await  _recordService.SubmitSurveillanceRecordAsync(request);
+            return new BaseResponse<string>(recordId);
         }
 
         [HttpGet]
