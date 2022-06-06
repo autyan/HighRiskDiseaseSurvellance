@@ -21,7 +21,7 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
             
         }
 
-        public async Task SubmitSurveillanceRecordAsync(SubmitRecordRequest request)
+        public async Task<string> SubmitSurveillanceRecordAsync(SubmitRecordRequest request)
         {
             var user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
             if (user == null)
@@ -37,6 +37,7 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                                                 user.Id);
             DbContext.Records.Add(record);
             await DbContext.SaveChangesAsync();
+            return record.Id;
         }
 
         public async Task<SurveillanceRecordHisDto[]> QueryUserRecordsAsync(UserRecordQuery query)

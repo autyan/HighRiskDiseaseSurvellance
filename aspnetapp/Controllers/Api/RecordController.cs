@@ -19,7 +19,7 @@ namespace aspnetapp.Controllers.Api
         }
 
         [HttpPost]
-        public Task SubmitSurveillanceRecord([FromBody]SubmitRecordRequest request)
+        public Task<string> SubmitSurveillanceRecord([FromBody]SubmitRecordRequest request)
         {
             request.UserId = UserId;
             return _recordService.SubmitSurveillanceRecordAsync(request);
