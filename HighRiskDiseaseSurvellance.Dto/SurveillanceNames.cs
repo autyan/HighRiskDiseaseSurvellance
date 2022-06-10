@@ -6,9 +6,11 @@ namespace HighRiskDiseaseSurvellance.Dto
     {
         private static readonly Dictionary<string, string> SurveillanceTypeNames = new();
 
+        public const string Hyperlipidemia = nameof(Hyperlipidemia);
+
         static SurveillanceNames()
         {
-            SurveillanceTypeNames.Add("Hyperlipidemia", "高血脂风险评估");
+            SurveillanceTypeNames.Add(Hyperlipidemia, "高血脂风险评估");
         }
 
         public static string GetSurveillanceTypeName(string type)

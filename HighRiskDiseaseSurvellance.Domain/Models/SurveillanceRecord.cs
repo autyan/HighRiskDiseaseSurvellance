@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using HighRiskDiseaseSurvellance.Domain.Models.ValueObjects;
 using HighRiskDiseaseSurvellance.Dto;
+using HighRiskDiseaseSurvellance.Dto.Models;
 using HighRiskDiseaseSurvellance.Infrastructure;
 
 namespace HighRiskDiseaseSurvellance.Domain.Models
@@ -32,6 +33,8 @@ namespace HighRiskDiseaseSurvellance.Domain.Models
 
         public SurveillanceRecordStatus Status { get; set; }
 
+        public decimal Score { get; set; }
+
         public SurveillanceRecord(UserInfo userInfo, string surveillanceContent, string surveillanceTypeName, string userId)
         {
             Id                   = ObjectId.GenerateNewId().ToString();
@@ -40,6 +43,12 @@ namespace HighRiskDiseaseSurvellance.Domain.Models
             SurveillanceTypeName = surveillanceTypeName;
             UserId               = userId;
             Status               = SurveillanceRecordStatus.Unpaid;
+        }
+
+        public void ComputeScore(ISurveillance surveillance)
+        {
+            Score  = surveillance.Compute();
+            Status = SurveillanceRecordStatus.Finished;
         }
     }
 }

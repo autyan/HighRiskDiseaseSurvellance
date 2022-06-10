@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using HighRiskDiseaseSurvellance.Domain.Models;
 using HighRiskDiseaseSurvellance.Domain.Models.ValueObjects;
@@ -35,6 +38,9 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                                                 request.RecordContent,
                                                 request.RecordTypeName,
                                                 user.Id);
+
+            var surveillance = ConvertRecordContentToSurveillance(request.RecordTypeName, request.RecordContent);
+            record.ComputeScore(surveillance);
             DbContext.Records.Add(record);
             await DbContext.SaveChangesAsync();
             return record.Id;
@@ -99,6 +105,32 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                        RecordsFiltered = queryTotal,
                        Data            = queriedUsers
                    };
+        }
+
+        public Task<SurveillanceRecordDto> GetRecordAsync(string id)
+        {
+            return DbContext.Records.Select(r => new SurveillanceRecordDto
+                                                 {
+                                                     Id=r.Id,
+                                                     CreateTime = r.CreateTime,
+                                                     OrderId = r.OrderId,
+                                                     SurveillanceContent = r.SurveillanceContent,
+                                                     SurveillanceTypeName = r.SurveillanceTypeName,
+                                                     Score = r.Score
+                                                 }).FirstOrDefaultAsync(r => r.Id == id);
+        }
+
+        private ISurveillance ConvertRecordContentToSurveillance(string name, string content)
+        {
+            switch (name)
+            {
+                case SurveillanceNames.Hyperlipidemia:
+                    return JsonSerializer.Deserialize<Hyperlipidemia>(content, new JsonSerializerOptions
+                                                                               {
+                                                                                   NumberHandling = JsonNumberHandling.AllowReadingFromString
+                                                                               });
+                default : return null;
+            }
         }
     }
 }

@@ -13,5 +13,7 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         public string OrderId { get; set; }
 
         public DateTime CreateTime { get; set; }
+
+        public decimal Score { get; set; }
     }
 }

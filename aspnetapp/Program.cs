@@ -13,6 +13,7 @@ using OAuth.Adapter.WeChat.Options;
 using OAuth.Adapter.WeChat.Requests;
 using System;
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Hosting;
 
@@ -28,7 +29,12 @@ try
     builder.Services.UserRedPacketService();
     builder.Services.AddWeChatAuth();
     builder.Services.Configure<WeChatOptions>(builder.Configuration.GetSection(nameof(WeChatOptions)));
-    var mvcBuilder = builder.Services.AddControllersWithViews(options => options.Filters.Add(typeof(AppExceptionFilterAttribute)));
+    var mvcBuilder = builder.Services.AddControllersWithViews(options => options.Filters.Add(typeof(AppExceptionFilterAttribute)))
+                            .AddJsonOptions(options =>
+                                            {
+                                                options.JsonSerializerOptions.NumberHandling =
+                                                     JsonNumberHandling.AllowReadingFromString;
+                                            });
     if (builder.Environment.IsDevelopment())
     {
         mvcBuilder.AddRazorRuntimeCompilation();

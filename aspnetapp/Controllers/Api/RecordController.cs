@@ -26,7 +26,7 @@ namespace aspnetapp.Controllers.Api
             return new BaseResponse<string>(recordId);
         }
 
-        [HttpGet]
+        [HttpGet("history")]
         public Task<SurveillanceRecordHisDto[]> QueryUserSurveillanceRecord([FromQuery]UserRecordQuery query)
         {
             if (UserId == null) return Task.FromResult<SurveillanceRecordHisDto[]>(null);
@@ -39,6 +39,12 @@ namespace aspnetapp.Controllers.Api
         public Task<DataTableResponse<SurveillanceRecordQueryDto[]>> QuerySurveillanceRecord([FromQuery] UserRecordQuery query)
         {
             return _recordService.QueryRecordsAsync(query);
+        }
+
+        [HttpGet("{id}")]
+        public Task<SurveillanceRecordDto> GetUserRecord(string id)
+        {
+            return _recordService.GetRecordAsync(id);
         }
     }
 }
