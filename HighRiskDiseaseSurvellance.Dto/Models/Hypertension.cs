@@ -104,7 +104,7 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
                     if (RiskFactors.ImpairedSugarAdhesion || RiskFactors.AbnormalFastingBloodGlucose) _basicRank += 1;
                     if (Tc >= 5.7                         || Ldlc > 3.3 || Hdlc < 1) _basicRank                  += 1;
                     if (RiskFactors.FamilyHistoryOfEarlyonsetCardiovascularDisease) _basicRank                   += 1;
-                    if ((Gender == 1 && Waistline >= 90) || (Gender == 0 && Waistline >= 85) || Bmi >= 28)
+                    if ((Gender == 0 && Waistline >= 90) || (Gender == 1 && Waistline >= 85) || Bmi >= 28)
                         _basicRank += 1;
                     if (RiskFactors.Hyperhomocysteine) _basicRank += 1;
                 }
