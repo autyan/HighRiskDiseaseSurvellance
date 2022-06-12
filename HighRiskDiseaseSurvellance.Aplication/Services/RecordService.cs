@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using HighRiskDiseaseSurvellance.Domain.Models;
+﻿using HighRiskDiseaseSurvellance.Domain.Models;
 using HighRiskDiseaseSurvellance.Domain.Models.ValueObjects;
 using HighRiskDiseaseSurvellance.Dto;
 using HighRiskDiseaseSurvellance.Dto.Models;
@@ -13,6 +8,10 @@ using HighRiskDiseaseSurvellance.Infrastructure;
 using HighRiskDiseaseSurvellance.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
 namespace HighRiskDiseaseSurvellance.Aplication.Services
 {
@@ -40,7 +39,10 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                                                 user.Id);
 
             var surveillance = ConvertRecordContentToSurveillance(request.RecordTypeName, request.RecordContent);
-            record.ComputeScore(surveillance);
+            if (surveillance != null)
+            {
+                record.ComputeScore(surveillance);
+            }
             DbContext.Records.Add(record);
             await DbContext.SaveChangesAsync();
             return record.Id;
@@ -129,6 +131,11 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                                                                                {
                                                                                    NumberHandling = JsonNumberHandling.AllowReadingFromString
                                                                                });
+                case SurveillanceNames.Hypertension:
+                    return JsonSerializer.Deserialize<Hypertension>(content, new JsonSerializerOptions
+                                                                             {
+                                                                                 NumberHandling = JsonNumberHandling.AllowReadingFromString
+                                                                             } );
                 default : return null;
             }
         }

@@ -70,6 +70,8 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         [JsonPropertyName("basicDisease")]
         public BasicDisease BasicDisease { get; set; }
 
+        public double UnHdlc => Tc - Hdlc;
+
         public decimal      Compute()
         {
             //先计算极高危疾病，如果存在则直接标记为高危
@@ -183,7 +185,7 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
                     mediumPoint += 1;
                 }
 
-                if (Hdlc >= 5.2)
+                if (UnHdlc >= 5.2)
                 {
                     mediumPoint += 1;
                 }
@@ -311,10 +313,16 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         public bool Diabetes { get; set; }
 
         /// <summary>
-        /// 急性冠状动脉综合征
+        /// 急性心肌梗死
         /// </summary>
-        [JsonPropertyName("acuteCoronarySyndrome")]
-        public bool AcuteCoronarySyndrome { get; set; }
+        [JsonPropertyName("acuteMyocardialInfarction")]
+        public bool AcuteMyocardialInfarction { get; set; }
+
+        /// <summary>
+        /// 不稳定性心绞痛
+        /// </summary>
+        [JsonPropertyName("unstableAngina")]
+        public bool UnstableAngina { get; set; }
 
         /// <summary>
         /// 稳定性冠心病
@@ -374,16 +382,17 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         {
             var basicScore = 0.0m;
 
-            if (AcuteCoronarySyndrome) basicScore         += 3;
-            if (StableCoronaryHeartDisease) basicScore    += 3;
-            if (AfterRevascularization) basicScore        += 3;
-            if (IschemicCardiomyopathy) basicScore        += 3;
-            if (IschemicStroke) basicScore                += 3;
-            if (TransientIschemicAttack) basicScore       += 3;
-            if (CarotidArteryStenosis) basicScore         += 3;
-            if (RenalArteryStenosis) basicScore           += 3;
-            if (ArterialStenosisInExtremities) basicScore += 3;
-            if (AbdominalAorticAneurysm) basicScore       += 3;
+            if (AcuteMyocardialInfarction) basicScore     += 2;
+            if (UnstableAngina) basicScore                += 2;
+            if (StableCoronaryHeartDisease) basicScore    += 2;
+            if (AfterRevascularization) basicScore        += 2;
+            if (IschemicCardiomyopathy) basicScore        += 2;
+            if (IschemicStroke) basicScore                += 2;
+            if (TransientIschemicAttack) basicScore       += 2;
+            if (CarotidArteryStenosis) basicScore         += 2;
+            if (RenalArteryStenosis) basicScore           += 2;
+            if (ArterialStenosisInExtremities) basicScore += 2;
+            if (AbdominalAorticAneurysm) basicScore       += 2;
 
             if (basicScore > 0) basicScore += 75;
 
