@@ -136,6 +136,16 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                                                                              {
                                                                                  NumberHandling = JsonNumberHandling.AllowReadingFromString
                                                                              } );
+                case SurveillanceNames.AnginaPectoris:
+                    return JsonSerializer.Deserialize<AnginaPectoris>(content, new JsonSerializerOptions
+                                                                               {
+                                                                                   NumberHandling = JsonNumberHandling.AllowReadingFromString
+                                                                               } );
+                case SurveillanceNames.CardiacInsufficiency:
+                    return JsonSerializer.Deserialize<CardiacInsufficiency>(content, new JsonSerializerOptions
+                                                                                     {
+                                                                                         NumberHandling = JsonNumberHandling.AllowReadingFromString
+                                                                                     } );
                 default : return null;
             }
         }
