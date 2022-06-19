@@ -28,7 +28,7 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
             var user = await DbContext.Users.FirstOrDefaultAsync(u => u.WeChatOpenId == request.WeChatOpenId);
             if (user == null)
             {
-                user = new User(request.NickName, request.PhoneNumber, request.WeChatOpenId, request.AvatarUrl);
+                user = new User(request.NickName, request.PhoneNumber, request.WeChatOpenId, request.AvatarUrl, distributorId: request.DistributorId);
 
                 await DbContext.AddAsync(user);
                 await DbContext.SaveChangesAsync();

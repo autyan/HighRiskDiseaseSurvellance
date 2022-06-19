@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using Microsoft.Extensions.Options;
 using OAuth.Adapter.WeChat.Options;
 using OAuth.Adapter.WeChat.Requests;
@@ -48,12 +49,25 @@ namespace OAuth.Adapter.WeChat
 
         public async Task<byte[]> GetUnlimitedCodeAsync(string scene)
         {
-            var accessToken = await GetAccessTokenAsync();
-            var responseMessage =  await _weChatAuthService.GetUnlimitedCodeAsync(accessToken.AccessToken, new UnlimitedCodeRequest
+            HttpResponseMessage responseMessage;
+            if (_hostingEnvironment.IsDevelopment())
+            {
+                var accessToken = await GetAccessTokenAsync();
+                responseMessage =  await _weChatAuthService.GetUnlimitedCodeAsync(accessToken.AccessToken, new UnlimitedCodeRequest
                                                                                                            {
                                                                                                                Scene = scene,
                                                                                                                EnvironmentVersion = GetEnvironmentVersion()
                                                                                                            });
+            }
+            else
+            {
+                responseMessage = await _weChatAuthService.GetUnlimitedCodeNoAccessTokenAsync(new UnlimitedCodeRequest
+                                                                                              {
+                                                                                                  Scene = scene,
+                                                                                                  EnvironmentVersion = GetEnvironmentVersion()
+                                                                                              });
+            }
+            
             return await responseMessage.Content.ReadAsByteArrayAsync();
         }
 

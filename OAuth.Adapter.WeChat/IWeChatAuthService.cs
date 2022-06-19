@@ -16,5 +16,8 @@ namespace OAuth.Adapter.WeChat
 
         [Post("/wxa/getwxacodeunlimit?access_token={accessToken}")]
         Task<HttpResponseMessage> GetUnlimitedCodeAsync(string accessToken, [Body(BodySerializationMethod.Serialized, true)]UnlimitedCodeRequest request);
+
+        [Post("/wxa/getwxacodeunlimit")]
+        Task<HttpResponseMessage> GetUnlimitedCodeNoAccessTokenAsync([Body(BodySerializationMethod.Serialized, true)]UnlimitedCodeRequest request);
     }
 }
