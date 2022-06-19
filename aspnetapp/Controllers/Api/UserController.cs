@@ -23,5 +23,19 @@ namespace aspnetapp.Controllers.Api
         {
             return _userService.QueryUsers(query);
         }
+
+        [HttpPost("Distributor/{id}")]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        public Task<bool> MakeDistributor(string id)
+        {
+            return _userService.MakeUserDistributorAsync(id);
+        }
+        
+        [HttpDelete("Distributor/{id}")]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        public Task<bool> CancelDistributor(string id)
+        {
+            return _userService.CancelUserDistributorAsync(id);
+        }
     }
 }

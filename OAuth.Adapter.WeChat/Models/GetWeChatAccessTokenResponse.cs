@@ -8,6 +8,6 @@ namespace OAuth.Adapter.WeChat.Models
         public string AccessToken { get; set; }
 
         [JsonPropertyName("expires_in")]
-        public string ExpiresIn { get; set; }
+        public int ExpiresIn { get; set; }
     }
 }

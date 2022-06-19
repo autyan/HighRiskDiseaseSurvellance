@@ -9,5 +9,9 @@
         public string AvatarUrl { get; set; }
 
         public string PhoneNumber { get; set; }
+        
+        public bool IsDistributor { get; set; }
+
+        public string DistributorQrCode { get; set; }
     }
 }

@@ -1,19 +1,26 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using HighRiskDiseaseSurvellance.Domain.Models;
+using HighRiskDiseaseSurvellance.Dto;
 using HighRiskDiseaseSurvellance.Dto.Models;
 using HighRiskDiseaseSurvellance.Dto.Requests;
 using HighRiskDiseaseSurvellance.Dto.Response;
+using HighRiskDiseaseSurvellance.Infrastructure;
 using HighRiskDiseaseSurvellance.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using OAuth.Adapter.WeChat;
 
 namespace HighRiskDiseaseSurvellance.Aplication.Services
 {
     public class UserService : BaseService
     {
-        public UserService(SurveillanceContext dbContext, ILogger<UserService> logger) : base(dbContext, logger)
+        private readonly IWeChatOAuthService _weChatOAuthService;
+        
+        public UserService(SurveillanceContext dbContext, ILogger<UserService> logger, IWeChatOAuthService weChatOAuthService) : base(dbContext, logger)
         {
+            _weChatOAuthService = weChatOAuthService;
         }
 
         public async Task<AppUserBaseInfo> UserLoginAsync(UserLoginRequest request)
@@ -33,6 +40,8 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                        NickName = user.NickName,
                        AvatarUrl = user.AvatarUrl,
                        PhoneNumber = user.PhoneNumber,
+                       IsDistributor = user.IsDistributor,
+                       DistributorQrCode = user.DistributorQrCode
                    };
         }
 
@@ -67,6 +76,36 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                        Data            = queriedUsers
                    };
 
+        }
+
+        public async Task<bool> MakeUserDistributorAsync(string id)
+        {
+            var user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                throw new DomainException(ErrorCode.UserNotFound);
+            }
+
+            var scene        = user.Id;
+            var qrCode       = await _weChatOAuthService.GetUnlimitedCodeAsync(scene);
+            var qrCodeBase64 = Convert.ToBase64String(qrCode);
+
+            user.MakeDistributor(qrCodeBase64);
+            await DbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> CancelUserDistributorAsync(string id)
+        {
+            var user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null)
+            {
+                throw new DomainException(ErrorCode.UserNotFound);
+            }
+            
+            user.CancelDistributor();
+            await DbContext.SaveChangesAsync();
+            return true;
         }
     }
 }

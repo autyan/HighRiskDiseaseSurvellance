@@ -7,6 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HighRiskDiseaseSurvellance.Dto\HighRiskDiseaseSurvellance.Dto.csproj" />
     <ProjectReference Include="..\HighRiskDiseaseSurvellance.Persistence\HighRiskDiseaseSurvellance.Persistence.csproj" />
+    <ProjectReference Include="..\OAuth.Adapter.WeChat\OAuth.Adapter.WeChat.csproj" />
   </ItemGroup>
 
 </Project>

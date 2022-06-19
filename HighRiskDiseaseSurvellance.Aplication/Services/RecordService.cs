@@ -146,6 +146,16 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                                                                                      {
                                                                                          NumberHandling = JsonNumberHandling.AllowReadingFromString
                                                                                      } );
+                case SurveillanceNames.AtrialFibrillationBleeding:
+                    return JsonSerializer.Deserialize<AtrialFibrillationBleeding>(content, new JsonSerializerOptions
+                                                                                {
+                                                                                    NumberHandling = JsonNumberHandling.AllowReadingFromString
+                                                                                } );
+                case SurveillanceNames.AtrialFibrillationIschemia:
+                    return JsonSerializer.Deserialize<AtrialFibrillationIschemia>(content, new JsonSerializerOptions
+                        {
+                            NumberHandling = JsonNumberHandling.AllowReadingFromString
+                        } );
                 default : return null;
             }
         }

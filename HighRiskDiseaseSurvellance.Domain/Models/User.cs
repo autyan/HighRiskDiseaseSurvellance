@@ -30,7 +30,7 @@ namespace HighRiskDiseaseSurvellance.Domain.Models
 
         public bool IsDistributor { get; set; }
 
-        [MaxLength(1024)]
+        [MaxLength(20000)]
         public string DistributorQrCode { get; set; }
 
         public User(string nickName,     string phoneNumber,
@@ -46,6 +46,18 @@ namespace HighRiskDiseaseSurvellance.Domain.Models
             DistributorId     = distributorId;
             IsDistributor     = isDistributor;
             DistributorQrCode = distributorQrCode;
+        }
+
+        public void MakeDistributor(string qrCode)
+        {
+            IsDistributor     = true;
+            DistributorQrCode = qrCode;
+        }
+
+        public void CancelDistributor()
+        {
+            IsDistributor     = false;
+            DistributorQrCode = null;
         }
     }
 }

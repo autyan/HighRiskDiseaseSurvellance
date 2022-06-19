@@ -124,6 +124,12 @@
                 }},
                 {"data":null,"render":function(data, type, row, meta) {
                     var html = '<a class="btn btn-primary" href="Record?userId=' + row.id + '" >健康记录</a>';
+                    if (row.isDistributor){
+                        html += '  <a class="btn btn-primary" href="#" onclick="cancelDistributor(\'' + row.id + '\')" >取消推广员</a>';
+                    }
+                    else{
+                        html += '  <a class="btn btn-primary" href="#" onclick="makeDistributor(\'' + row.id + '\')" >设为推广员</a>';
+                    }
                     return html;
                 }}],
             language: {
@@ -151,5 +157,26 @@
                 }
             }
         });
+        
+        function makeDistributor(id){
+            $.ajax({
+                type:"POST",
+                url:"api/User/Distributor/"+id, 
+                success:function (data){
+                    location.reload();
+                }
+            })
+        }
+        
+        function cancelDistributor(id){
+            $.ajax({
+                type:"DELETE",
+                url:"api/User/Distributor/"+id, 
+                success:function (data){
+                    location.reload();
+                }
+            })
+        }
     </script>
+
 }
