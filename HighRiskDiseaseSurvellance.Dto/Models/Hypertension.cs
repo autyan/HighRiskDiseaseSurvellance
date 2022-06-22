@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace HighRiskDiseaseSurvellance.Dto.Models
 {
@@ -88,7 +89,7 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         [JsonPropertyName("targetOrganDamage")]
         public TargetOrganDamage TargetOrganDamage { get; set; }
 
-        public double Bmi => Weight / (Height * Height);
+        public double Bmi => Weight / Math.Pow(Height / 100.0, 2.0);
 
         private int? _basicRank = null;
 
