@@ -13,5 +13,7 @@
         public bool IsDistributor { get; set; }
 
         public string DistributorQrCode { get; set; }
+
+        public bool HasSyncWeChatUserProfile { get; set; }
     }
 }

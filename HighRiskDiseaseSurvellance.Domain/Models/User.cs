@@ -1,4 +1,5 @@
-﻿using HighRiskDiseaseSurvellance.Infrastructure;
+﻿using System;
+using HighRiskDiseaseSurvellance.Infrastructure;
 using System.ComponentModel.DataAnnotations;
 
 namespace HighRiskDiseaseSurvellance.Domain.Models
@@ -33,19 +34,22 @@ namespace HighRiskDiseaseSurvellance.Domain.Models
         [MaxLength(20000)]
         public string DistributorQrCode { get; set; }
 
-        public User(string nickName,     string phoneNumber,
-                    string weChatOpenId, string avatarUrl,
-                    bool   isDistributor = false,
-                    string distributorId = null, string distributorQrCode = null)
+        public bool HasSyncWeChatUserProfile { get; set; }
+
+        public User(string weChatOpenId,
+                    bool   isDistributor     = false,
+                    string distributorId     = null, 
+                    string distributorQrCode = null)
         {
             Id                = ObjectId.GenerateNewId().ToString();
-            NickName          = nickName;
-            PhoneNumber       = phoneNumber;
+            NickName          = $"匿名用户：{Guid.NewGuid().ToString().Replace("-", string.Empty).Substring(0,8)}";
             WeChatOpenId      = weChatOpenId;
-            AvatarUrl         = avatarUrl;
             DistributorId     = distributorId;
             IsDistributor     = isDistributor;
             DistributorQrCode = distributorQrCode;
+            AvatarUrl =
+                "https://7072-prod-0g7y3h923f261408-1311435230.tcb.qcloud.la/e12f955b3de3ae2c04121b6fcfc7f749.jpg?sign=b878bc165f8112c3783950d16aaf08e7&t=1656088018";
+            HasSyncWeChatUserProfile = false;
         }
 
         public void MakeDistributor(string qrCode)
@@ -58,6 +62,18 @@ namespace HighRiskDiseaseSurvellance.Domain.Models
         {
             IsDistributor     = false;
             DistributorQrCode = null;
+        }
+
+        public void SetDistributor(string distributorId)
+        {
+            DistributorId = distributorId;
+        }
+
+        public void SyncWeChatUserProfile(string nickName, string avatarUrl)
+        {
+            NickName                 = nickName;
+            AvatarUrl                = avatarUrl;
+            HasSyncWeChatUserProfile = true;
         }
     }
 }

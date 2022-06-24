@@ -37,5 +37,12 @@ namespace aspnetapp.Controllers.Api
         {
             return _userService.CancelUserDistributorAsync(id);
         }
+
+        [HttpPost("SyncWeChatProfile")]
+        public Task SyncWeChatProfile([FromBody]SyncUserProfileRequest request)
+        {
+            request.Id = UserId;
+            return _userService.SyncWeChatProfileAsync(request);
+        }
     }
 }

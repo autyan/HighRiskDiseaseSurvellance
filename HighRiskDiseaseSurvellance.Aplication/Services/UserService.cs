@@ -28,20 +28,25 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
             var user = await DbContext.Users.FirstOrDefaultAsync(u => u.WeChatOpenId == request.WeChatOpenId);
             if (user == null)
             {
-                user = new User(request.NickName, request.PhoneNumber, request.WeChatOpenId, request.AvatarUrl, distributorId: request.DistributorId);
-
+                user = new User(request.WeChatOpenId, distributorId: request.DistributorId);
                 await DbContext.AddAsync(user);
                 await DbContext.SaveChangesAsync();
             }
 
+            if (string.IsNullOrWhiteSpace(user.DistributorId) && !string.IsNullOrWhiteSpace(request.DistributorId))
+            {
+                user.SetDistributor(request.DistributorId);
+            }
+
             return new AppUserBaseInfo
                    {
-                       Id = user.Id,
-                       NickName = user.NickName,
-                       AvatarUrl = user.AvatarUrl,
-                       PhoneNumber = user.PhoneNumber,
-                       IsDistributor = user.IsDistributor,
-                       DistributorQrCode = user.DistributorQrCode
+                       Id                       = user.Id,
+                       NickName                 = user.NickName,
+                       AvatarUrl                = user.AvatarUrl,
+                       PhoneNumber              = user.PhoneNumber,
+                       IsDistributor            = user.IsDistributor,
+                       DistributorQrCode        = user.DistributorQrCode,
+                       HasSyncWeChatUserProfile = user.HasSyncWeChatUserProfile
                    };
         }
 
@@ -106,6 +111,18 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
             user.CancelDistributor();
             await DbContext.SaveChangesAsync();
             return true;
+        }
+
+        public async Task SyncWeChatProfileAsync(SyncUserProfileRequest request)
+        {
+            var user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
+            if (user == null)
+            {
+                throw new DomainException(ErrorCode.UserNotFound);
+            }
+
+            user.SyncWeChatUserProfile(request.NickName, request.Avatar);
+            await DbContext.SaveChangesAsync();
         }
     }
 }

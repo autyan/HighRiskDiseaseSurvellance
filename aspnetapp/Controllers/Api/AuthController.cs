@@ -45,9 +45,6 @@ namespace aspnetapp.Controllers.Api
                                                          {
                                                              WeChatOpenId = wechatUserSession.OpenId,
                                                              DistributorId = request.DistributorId,
-                                                             NickName = request.NickName,
-                                                             AvatarUrl = request.AvatarUrl,
-                                                             PhoneNumber = request.PhoneNumber,
                                                          });
             if (user == null)
             {
