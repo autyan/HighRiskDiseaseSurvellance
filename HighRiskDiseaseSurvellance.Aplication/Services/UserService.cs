@@ -113,7 +113,7 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
             return true;
         }
 
-        public async Task SyncWeChatProfileAsync(SyncUserProfileRequest request)
+        public async Task<AppUserBaseInfo> SyncWeChatProfileAsync(SyncUserProfileRequest request)
         {
             var user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == request.Id);
             if (user == null)
@@ -123,6 +123,16 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
 
             user.SyncWeChatUserProfile(request.NickName, request.Avatar);
             await DbContext.SaveChangesAsync();
+            return new AppUserBaseInfo
+                   {
+                       Id                       = user.Id,
+                       NickName                 = user.NickName,
+                       AvatarUrl                = user.AvatarUrl,
+                       PhoneNumber              = user.PhoneNumber,
+                       IsDistributor            = user.IsDistributor,
+                       DistributorQrCode        = user.DistributorQrCode,
+                       HasSyncWeChatUserProfile = user.HasSyncWeChatUserProfile
+                   };
         }
     }
 }

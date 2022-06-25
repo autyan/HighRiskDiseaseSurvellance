@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using HighRiskDiseaseSurvellance.Aplication.Services;
+using HighRiskDiseaseSurvellance.Dto.Models;
 using HighRiskDiseaseSurvellance.Dto.Requests;
 using HighRiskDiseaseSurvellance.Dto.Response;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -39,7 +40,7 @@ namespace aspnetapp.Controllers.Api
         }
 
         [HttpPost("SyncWeChatProfile")]
-        public Task SyncWeChatProfile([FromBody]SyncUserProfileRequest request)
+        public Task<AppUserBaseInfo> SyncWeChatProfile([FromBody]SyncUserProfileRequest request)
         {
             request.Id = UserId;
             return _userService.SyncWeChatProfileAsync(request);
