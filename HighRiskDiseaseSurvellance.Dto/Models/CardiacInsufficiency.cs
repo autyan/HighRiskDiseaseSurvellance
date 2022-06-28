@@ -60,6 +60,12 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
     [JsonPropertyName("footBall")]
     public bool FootBall { get; set; }
 
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
+
     public decimal Compute()
     {
         var basicScore = 0;
@@ -127,6 +133,12 @@ public class HardActivity
     [JsonPropertyName("riding")]
     public bool Riding { get; set; }
 
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
+
     public decimal Compute()
     {
         var basicScore = 0;
@@ -183,6 +195,12 @@ public class NormalActivityCardiac
     /// </summary>
     [JsonPropertyName("babySet")]
     public bool BabySet { get; set; }
+
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
 
     public decimal Compute()
     {
@@ -252,6 +270,12 @@ public class CasualActivityCardiac
     /// </summary>
     [JsonPropertyName("intravenousInjection")]
     public bool IntravenousInjection { get; set; }
+
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
 
     public decimal Compute()
     {

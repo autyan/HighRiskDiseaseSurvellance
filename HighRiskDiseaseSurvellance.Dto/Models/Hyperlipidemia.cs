@@ -75,7 +75,7 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
 
         public decimal      Compute()
         {
-            //先计算极高危疾病，如果存在则直接标记为高危
+            //先计算极高危疾病，如果存在则直接标记为极高危
             var basicScore = BasicDisease.Compute();
             if (basicScore > 0) return basicScore;
 
@@ -95,43 +95,50 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
             var basicScore = 0.0m;
 
             //高危1
-            if (Ldlc >= 4.9) basicScore += 5;
+            if (Ldlc >= 4.9)
+            {
+                basicScore = this.TryUpdateScore(55, basicScore);
+            }
 
             //高危2
-            if (Tc   >= 7.2) basicScore += 5;
+            if (Tc >= 7.2)
+            {
+                basicScore = this.TryUpdateScore(55, basicScore);
+            }
 
             //高危3
-            if (BasicDisease.Diabetes
-             && Age > 40
-             && Ldlc is >= 1.8 and <= 4.9
-             && Tc is >= 3.1 and <= 7.2)
+            if (Ldlc is >= 1.8 and < 4.9
+             && Tc is >= 3.1 and < 7.2)
             {
-                basicScore += 5;
+                if (BasicDisease.Diabetes && Age > 40)
+                {
+                    basicScore = this.TryUpdateScore(60, basicScore);
+                }
+                else
+                {
+                    basicScore = this.TryUpdateScore(50, basicScore);
+                }
             }
 
             //高危4
-            if ((Tc is >= 3.1 and <= 4.1 || (Ldlc is >= 1.8 and <= 2.6 && BasicDisease.Hypertension))
-             && RiskPoint >= 3)
+            if ((Tc is >= 3.1 and <= 4.1 || (Ldlc is >= 1.8 and <= 2.6 && BasicDisease.Hypertension)))
             {
-                basicScore += 5;
+                basicScore = this.TryUpdateScore(RiskPoint >= 3 ? 65 : 50, basicScore);
             }
 
             //高危5
-            if ((Tc is >= 4.1 and < 5.2 || (Ldlc is >= 2.6 and < 3.4 && BasicDisease.Hypertension))
-             && RiskPoint >= 2)
+            if ((Tc is >= 4.1 and < 5.2 || (Ldlc is >= 2.6 and < 3.4 && BasicDisease.Hypertension)))
             {
-                basicScore += 5;
+                basicScore = this.TryUpdateScore(RiskPoint >= 2 ? 70 : 50, basicScore);
             }
 
             //高危6
-            if ((Tc is >= 5.2 and <= 7.2 || (Ldlc is >= 3.4 and < 4.9 && BasicDisease.Hypertension))
-                && RiskPoint >= 2)
+            if ((Tc is >= 5.2 and < 7.2 || (Ldlc is >= 3.4 and < 4.9 && BasicDisease.Hypertension)))
             {
 
-                basicScore += 5;
+                basicScore = this.TryUpdateScore(RiskPoint >= 2 ? 74 : 50, basicScore);
             }
 
-            if (basicScore > 0) basicScore += 50;
             return basicScore;
         }
 
@@ -142,43 +149,36 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
             var basicScore = 0.0m;
 
             //中危1
-            if (((Tc is >= 3.1 and < 4.1) || (Ldlc is >= 1.8 and < 2.6 && BasicDisease.Hypertension))
-             && RiskPoint >= 2)
+            if (((Tc is >= 3.1 and < 4.1) || (Ldlc is >= 1.8 and < 2.6 && BasicDisease.Hypertension)))
             {
-                basicScore += 5;
+                basicScore = this.TryUpdateScore(RiskPoint >= 2 ? 30 : 25, basicScore);
             }
 
             //中危2
-            if (((Tc is >= 4.1 and < 5.2) || (Ldlc is >= 2.6 and < 3.4 && BasicDisease.Hypertension))
-             && RiskPoint >= 1)
+            if (((Tc is >= 4.1 and < 5.2) || (Ldlc is >= 2.6 and < 3.4 && BasicDisease.Hypertension)))
             {
-                basicScore += 5;
+                basicScore = this.TryUpdateScore(RiskPoint >= 1 ? 35 : 25, basicScore);
             }
 
             //中危3
-            if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 3.4 and < 4.9 && BasicDisease.Hypertension))
-             && RiskPoint >= 1)
+            if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 3.4 and < 4.9 && BasicDisease.Hypertension)))
             {
-                basicScore += 5;
+                basicScore = this.TryUpdateScore(RiskPoint >= 1 ? 45 : 25, basicScore);
             }
 
             //中危4
-            if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 3.4 and < 4.9 && !BasicDisease.Hypertension))
-             && RiskPoint >= 2)
+            if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 3.4 and < 4.9 && !BasicDisease.Hypertension)))
             {
-                basicScore += 5;
+                basicScore = this.TryUpdateScore(RiskPoint >= 2 ? 48 : 25, basicScore);
             }
 
             //中危5
-            if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 2.6 and < 3.4 && !BasicDisease.Hypertension))
-             && RiskPoint >= 3)
+            if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 2.6 and < 3.4 && !BasicDisease.Hypertension)))
             {
-                basicScore += 5;
+                basicScore = this.TryUpdateScore(RiskPoint >= 3 ? 40 : 25, basicScore);
             }
 
-            if (basicScore > 0) basicScore += 25;
-
-            if (basicScore > 0 && Age < 55)
+            if (basicScore >= 25 && Age < 55)
             {
                 var mediumPoint = 0;
                 if (Sbp >= 160 || Dbp >= 100)
@@ -208,7 +208,7 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
 
                 if (mediumPoint >= 2)
                 {
-                    basicScore = 51;
+                    basicScore = this.TryUpdateScore(55, basicScore);
                 }
             }
 
@@ -220,44 +220,40 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
             var basicScore = 0.0m;
 
             //低危1
-            if (((Tc is >= 3.1 and < 4.1) || (Ldlc is >= 1.8 and < 2.6 && BasicDisease.Hypertension))
-             && RiskPoint <= 1)
+            if (((Tc is >= 3.1 and < 4.1) || (Ldlc is >= 1.8 and < 2.6 && BasicDisease.Hypertension)))
             {
-                basicScore += 4;
+                basicScore = this.TryUpdateScore(RiskPoint <= 1 ? 10 : 0, basicScore);
             }
 
             //低危2
             if (Tc is >= 3.1 and < 4.1 || (Ldlc is >= 1.8 and < 2.6 && !BasicDisease.Hypertension))
             {
-                basicScore += 4;
+                basicScore = this.TryUpdateScore(5, basicScore);
             }
 
             //低危3
             if (((Tc is >= 4.1 and < 5.2) || (Ldlc is >= 2.6 and < 3.4 && !BasicDisease.Hypertension))
              && RiskPoint <= 2)
             {
-                basicScore += 4;
+                basicScore = this.TryUpdateScore(RiskPoint <= 1 ? 15 : 0, basicScore);
             }
 
             //低危4
-            if (((Tc is >= 4.1 and < 5.2) || (Ldlc is >= 2.6 and < 3.4 && BasicDisease.Hypertension))
-             && RiskPoint == 0)
+            if (((Tc is >= 4.1 and < 5.2) || (Ldlc is >= 2.6 and < 3.4 && BasicDisease.Hypertension)))
             {
-                basicScore += 4;
+                basicScore = this.TryUpdateScore(RiskPoint == 0 ? 20 : 0, basicScore);
             }
 
             //低危5
-            if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 3.4 and < 4.9 && !BasicDisease.Hypertension))
-             && RiskPoint <= 1)
+            if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 3.4 and < 4.9 && !BasicDisease.Hypertension)))
             {
-                basicScore += 4;
+                basicScore = this.TryUpdateScore(RiskPoint <= 1 ? 23 : 0, basicScore);
             }
 
             //低危6
-            if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 3.4 and < 4.9 && BasicDisease.Hypertension))
-             && RiskPoint == 0)
+            if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 3.4 and < 4.9 && BasicDisease.Hypertension)))
             {
-                basicScore += 4;
+                basicScore = this.TryUpdateScore(RiskPoint == 0 ? 24 : 0, basicScore);
             }
 
             return basicScore;
@@ -314,16 +310,10 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         public bool Diabetes { get; set; }
 
         /// <summary>
-        /// 急性心肌梗死
+        /// 急性冠状动脉综合征
         /// </summary>
         [JsonPropertyName("acuteMyocardialInfarction")]
         public bool AcuteMyocardialInfarction { get; set; }
-
-        /// <summary>
-        /// 不稳定性心绞痛
-        /// </summary>
-        [JsonPropertyName("unstableAngina")]
-        public bool UnstableAngina { get; set; }
 
         /// <summary>
         /// 稳定性冠心病
@@ -379,23 +369,30 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         [JsonPropertyName("abdominalAorticAneurysm")]
         public bool AbdominalAorticAneurysm       { get; set; }
 
+        /// <summary>
+        /// 以上皆无
+        /// </summary>
+        [JsonPropertyName("none")]
+        public bool None { get; set; }
+
         public decimal Compute()
         {
             var basicScore = 0.0m;
 
-            if (AcuteMyocardialInfarction) basicScore     += 2;
-            if (UnstableAngina) basicScore                += 2;
-            if (StableCoronaryHeartDisease) basicScore    += 2;
-            if (AfterRevascularization) basicScore        += 2;
-            if (IschemicCardiomyopathy) basicScore        += 2;
-            if (IschemicStroke) basicScore                += 2;
-            if (TransientIschemicAttack) basicScore       += 2;
-            if (CarotidArteryStenosis) basicScore         += 2;
-            if (RenalArteryStenosis) basicScore           += 2;
-            if (ArterialStenosisInExtremities) basicScore += 2;
-            if (AbdominalAorticAneurysm) basicScore       += 2;
+            if (AcuteMyocardialInfarction) basicScore     += 3;
+            if (StableCoronaryHeartDisease) basicScore    += 3;
+            if (AfterRevascularization) basicScore        += 3;
+            if (IschemicCardiomyopathy) basicScore        += 3;
+            if (IschemicStroke) basicScore                += 3;
+            if (TransientIschemicAttack) basicScore       += 3;
+            if (CarotidArteryStenosis) basicScore         += 3;
+            if (RenalArteryStenosis) basicScore           += 3;
+            if (ArterialStenosisInExtremities) basicScore += 3;
+            if (AbdominalAorticAneurysm) basicScore       += 3;
 
             if (basicScore > 0) basicScore += 75;
+
+            if (basicScore > 100) basicScore = 100;
 
             return basicScore;
         }

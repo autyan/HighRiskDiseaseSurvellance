@@ -48,6 +48,12 @@ public class BasicActivity
     [JsonPropertyName("climbStairs")]
     public bool ClimbStairs { get; set; }
 
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
+
     public decimal Compute()
     {
         var basicScore = 0;
@@ -91,6 +97,12 @@ public class CommonActivity
     /// </summary>
     [JsonPropertyName("goUpOneStairs")]
     public bool GoUpOneStairs { get; set; }
+
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
 
     public decimal Compute()
     {
@@ -140,6 +152,12 @@ public class NormalActivity
     [JsonPropertyName("babySet")]
     public bool BabySet { get; set; }
 
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
+
     public decimal Compute()
     {
         var basicScore = 0;
@@ -187,6 +205,12 @@ public class CasualActivity
     /// </summary>
     [JsonPropertyName("painting")]
     public bool Painting { get; set; }
+
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
 
     public decimal Compute()
     {

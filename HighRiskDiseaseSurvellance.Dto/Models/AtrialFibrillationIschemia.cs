@@ -58,9 +58,9 @@ public class AtrialFibrillationIschemia : ISurveillance
 
         if (CongestiveHeartFailure) score              += 1;
         if (Hypertension) score                        += 1;
-        if (OverAge) score                             += 1;
+        if (OverAge) score                             += 2;
         if (Diabetes) score                            += 1;
-        if (HistoryOfPreviousStrokeOrThrombosis) score += 1;
+        if (HistoryOfPreviousStrokeOrThrombosis) score += 2;
         if (VascularDisease) score                     += 1;
         if (AgeAmount) score                           += 1;
         if (Female) score                              += 1;

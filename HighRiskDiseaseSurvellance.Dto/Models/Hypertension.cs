@@ -116,50 +116,234 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
 
         public decimal Compute()
         {
-            var basicScore = 0;
-            if (TargetOrganDamage.OrganDamageRank > 1)
+            var basicScore = 0m;
+            if (TargetOrganDamage.OrganDamageRank > 0)
             {
+                if (Sbp is >= 130 and <= 139 || Dbp is >= 85 and <= 89)
+                {
+                    basicScore = TargetOrganDamage.OrganDamageRank switch
+                                 {
+                                     1 => this.TryUpdateScore(30, basicScore),
+                                     2 => this.TryUpdateScore(40, basicScore),
+                                     3 => this.TryUpdateScore(55, basicScore),
+                                     _ => basicScore
+                                 };
+                }
+
+                if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
+                {
+                    basicScore = TargetOrganDamage.OrganDamageRank switch
+                                 {
+                                     1 => this.TryUpdateScore(55, basicScore),
+                                     2 => this.TryUpdateScore(60, basicScore),
+                                     3 => this.TryUpdateScore(70, basicScore),
+                                     _ => basicScore
+                                 };
+                }
+
+
+                if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and < 109)
+                {
+                    basicScore = TargetOrganDamage.OrganDamageRank switch
+                                 {
+                                     1 => this.TryUpdateScore(60, basicScore),
+                                     2 => this.TryUpdateScore(68, basicScore),
+                                     3 => this.TryUpdateScore(72, basicScore),
+                                     _ => basicScore
+                                 };
+                }
                 if (Sbp >= 180 || Dbp >= 110)
                 {
-                    basicScore = 76;
-                }
-                else if(Sbp is >= 140 and <= 179 || Dbp is >= 90 and <= 109)
-                {
-                    basicScore = 51;
+                    basicScore = TargetOrganDamage.OrganDamageRank switch
+                                 {
+                                     1 => this.TryUpdateScore(80, basicScore),
+                                     2 => this.TryUpdateScore(90, basicScore),
+                                     3 => this.TryUpdateScore(90, basicScore),
+                                     _ => basicScore
+                                 };
                 }
             }
 
-            if (ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank > 1
-             && (Sbp >= 140 || Dbp >= 90))
+            if (ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank > 0)
             {
-                basicScore = 76;
+                if (Sbp is >= 130 and <= 139 || Dbp is >= 85 and <= 89)
+                {
+                    basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
+                                 {
+                                     1 => this.TryUpdateScore(76, basicScore),
+                                     2 => this.TryUpdateScore(85, basicScore),
+                                     _ => this.TryUpdateScore(85, basicScore)
+                                 };
+                }
+
+                if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
+                {
+                    basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
+                                 {
+                                     1 => this.TryUpdateScore(90, basicScore),
+                                     2 => this.TryUpdateScore(95, basicScore),
+                                     _ => this.TryUpdateScore(95, basicScore)
+                                 };
+                }
+
+                if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)
+                {
+                    basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
+                                 {
+                                     1 => this.TryUpdateScore(90, basicScore),
+                                     2 => this.TryUpdateScore(95, basicScore),
+                                     _ => this.TryUpdateScore(95, basicScore)
+                                 };
+                }
+
+                if (Sbp >= 180 || Dbp >= 110)
+                {
+                    basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
+                                 {
+                                     1 => this.TryUpdateScore(90, basicScore),
+                                     2 => this.TryUpdateScore(95, basicScore),
+                                     _ => this.TryUpdateScore(95, basicScore)
+                                 };
+                }
             }
 
             if (BasicRank >= 3)
             {
-                if (basicScore < 76 && (Sbp >= 180 || Dbp >= 110)) basicScore = 76;
+                if (Sbp is >= 130 and <= 139 || Dbp is >= 85 and <= 99)
+                {
+                    basicScore = BasicRank switch
+                                 {
+                                     3 => this.TryUpdateScore(30, basicScore),
+                                     4 => this.TryUpdateScore(35, basicScore),
+                                     5 => this.TryUpdateScore(45, basicScore),
+                                     6 => this.TryUpdateScore(55, basicScore),
+                                     7 => this.TryUpdateScore(65, basicScore),
+                                     _ => basicScore
+                                 };
+                }
 
-                if (basicScore < 51 && (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)) basicScore = 51;
+                if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
+                {
+                    basicScore = BasicRank switch
+                                 {
+                                     3 => this.TryUpdateScore(53, basicScore),
+                                     4 => this.TryUpdateScore(60, basicScore),
+                                     5 => this.TryUpdateScore(65, basicScore),
+                                     6 => this.TryUpdateScore(70, basicScore),
+                                     7 => this.TryUpdateScore(73, basicScore),
+                                     _ => basicScore
+                                 };
+                }
 
-                if (basicScore < 51 && (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)) basicScore = 51;
+                if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)
+                {
+                    basicScore = BasicRank switch
+                                 {
+                                     3 => this.TryUpdateScore(55, basicScore),
+                                     4 => this.TryUpdateScore(65, basicScore),
+                                     5 => this.TryUpdateScore(68, basicScore),
+                                     6 => this.TryUpdateScore(72, basicScore),
+                                     7 => this.TryUpdateScore(74, basicScore),
+                                     _ => basicScore
+                                 };
+                }
+
+                if (Sbp >= 180 || Dbp >= 100)
+                {
+                    basicScore = BasicRank switch
+                                 {
+                                     3 => this.TryUpdateScore(82, basicScore),
+                                     4 => this.TryUpdateScore(84, basicScore),
+                                     5 => this.TryUpdateScore(88, basicScore),
+                                     6 => this.TryUpdateScore(93, basicScore),
+                                     7 => this.TryUpdateScore(98, basicScore),
+                                     _ => basicScore
+                                 };
+                }
             }
 
             if (BasicRank is >= 1 and < 3)
             {
-                if (basicScore < 76 && (Sbp >= 180 || Dbp >= 110)) basicScore = 76;
+                if (Sbp is >= 130 and <= 139 || Dbp is >= 85 and <= 99)
+                {
+                    basicScore = BasicRank switch
+                                 {
+                                     1 => this.TryUpdateScore(10, basicScore),
+                                     2 => this.TryUpdateScore(15, basicScore),
+                                     _ => basicScore
+                                 };
+                }
 
-                if (basicScore < 26 && (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)) basicScore = 26;
+                if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
+                {
+                    basicScore = BasicRank switch
+                                 {
+                                     1 => this.TryUpdateScore(35, basicScore),
+                                     2 => this.TryUpdateScore(45, basicScore),
+                                     _ => basicScore
+                                 };
+                }
 
-                if (basicScore < 26 && (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)) basicScore = 26;
+                if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)
+                {
+                    basicScore = BasicRank switch
+                                 {
+                                     1 => this.TryUpdateScore(45, basicScore),
+                                     2 => this.TryUpdateScore(55, basicScore),
+                                     _ => basicScore
+                                 };
+                }
+
+                if (Sbp >= 180 || Dbp >= 110)
+                {
+                    basicScore = BasicRank switch
+                                 {
+                                     1 => this.TryUpdateScore(76, basicScore),
+                                     2 => this.TryUpdateScore(80, basicScore),
+                                     _ => basicScore
+                                 };
+                }
             }
 
             if (BasicRank == 0)
             {
-                if (basicScore < 51 && (Sbp >= 180 || Dbp >= 110)) basicScore = 51;
+                if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
+                {
+                    basicScore = this.TryUpdateScore(20, basicScore);
+                }
 
-                if (basicScore < 26 && (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)) basicScore = 26;
+                if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)
+                {
+                    basicScore = this.TryUpdateScore(40, basicScore);
+                }
 
-                if (basicScore < 1 && (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)) basicScore = 0;
+                if (Sbp >= 180 || Dbp >= 110)
+                {
+                    basicScore = this.TryUpdateScore(60, basicScore);
+                }
+            }
+
+            if (ConcomitantClinicalDisorders.Diabetes)
+            {
+                if (Sbp is >= 130 and <= 139 || Dbp is >= 85 and <= 99)
+                {
+                    basicScore = this.TryUpdateScore(55, basicScore);
+                }
+
+                if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
+                {
+                    basicScore = this.TryUpdateScore(60, basicScore);
+                }
+
+                if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)
+                {
+                    basicScore = this.TryUpdateScore(70, basicScore);
+                }
+
+                if (Sbp >= 180 || Dbp >= 110)
+                {
+                    basicScore = this.TryUpdateScore(90, basicScore);
+                }
             }
 
             return basicScore;
@@ -191,6 +375,12 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         /// </summary>
         [JsonPropertyName("hyperhomocysteine")]
         public bool Hyperhomocysteine { get; set; }
+
+        /// <summary>
+        /// 以上皆无
+        /// </summary>
+        [JsonPropertyName("none")]
+        public bool None { get; set; }
     }
 
     public class ConcomitantClinicalDisorders
@@ -279,6 +469,12 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         [JsonPropertyName("diabetes")]
         public bool Diabetes { get; set; }
 
+        /// <summary>
+        /// 以上皆无
+        /// </summary>
+        [JsonPropertyName("none")]
+        public bool None { get; set; }
+
         private int? _concomitantClinicalDisordersRank = null;
 
         public int ConcomitantClinicalDisordersRank
@@ -328,6 +524,12 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         /// </summary>
         [JsonPropertyName("retinalArteryFocalPointOrExtensiveStenosis")]
         public bool RetinalArteryFocalPointOrExtensiveStenosis { get; set; }
+
+        /// <summary>
+        /// 以上皆无
+        /// </summary>
+        [JsonPropertyName("none")]
+        public bool None { get; set; }
 
 
         private int? _organDamageRank = null;

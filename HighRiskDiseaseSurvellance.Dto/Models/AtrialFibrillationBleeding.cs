@@ -39,6 +39,7 @@ public class AtrialFibrillationBleeding : ISurveillance
     /// </summary>
     [JsonPropertyName("drugs")]
     public Drugs                  Drugs                  { get; set; }
+
     public decimal Compute()
     {
         return BasicHealthy.Compute()
@@ -71,12 +72,19 @@ public class AbnormalKidneyFunction
     [JsonPropertyName("serumCreatinine")]
     public bool SerumCreatinine  { get; set; }
 
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
+
     public decimal Compute()
     {
         var score                   = 0.0m;
         if (ChronicDialysis) score  += 1;
         if (KidneyTransplant) score += 1;
         if (SerumCreatinine) score  += 1;
+        if (score > 1) score        =  1;
         return score;
     }
 }
@@ -94,12 +102,19 @@ public class AbnormalLiverFunction
     /// </summary>
     [JsonPropertyName("bilirubin")]
     public bool Bilirubin           { get; set; }
+
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
     
     public decimal Compute()
     {
         var score                      = 0.0m;
         if (ChronicLiverDisease) score += 1;
         if (Bilirubin) score           += 1;
+        if(score > 1) score = 1;
         return score;
     }
 }
@@ -123,6 +138,12 @@ public class BasicHealthy
     /// </summary>
     [JsonPropertyName("overAge")]
     public bool OverAge      { get; set; }
+
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
     
     public decimal Compute()
     {
@@ -153,6 +174,12 @@ public class Bleeding
     /// </summary>
     [JsonPropertyName("anemia")]
     public bool Anemia               { get; set; }
+
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
     
     public decimal Compute()
     {
@@ -160,6 +187,7 @@ public class Bleeding
         if (HistoryOfBleeding) score    += 1;
         if (BleedingConstitution) score += 1;
         if (Anemia) score               += 1;
+        if (score > 1) score            =  1;
         return score;
     }
 }
@@ -183,6 +211,12 @@ public class Drugs
     /// </summary>
     [JsonPropertyName("alcoholism")]
     public bool Alcoholism        { get; set; }
+
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
     
     public decimal Compute()
     {
@@ -190,6 +224,7 @@ public class Drugs
         if (AntiplateletDrugs) score += 1;
         if (NonsteroidalDrugs) score += 1;
         if (Alcoholism) score        += 1;
+        if(score > 1) score = 1;
         return score;
     }
 }
@@ -213,6 +248,12 @@ public class InrUnstable
     /// </summary>
     [JsonPropertyName("outOfRange")]
     public bool OutOfRange { get; set; }
+
+    /// <summary>
+    /// 以上皆无
+    /// </summary>
+    [JsonPropertyName("none")]
+    public bool None { get; set; }
     
     public decimal Compute()
     {
