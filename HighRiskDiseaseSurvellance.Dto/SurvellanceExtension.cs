@@ -9,7 +9,7 @@ namespace HighRiskDiseaseSurvellance.Dto
             var finalScore = currentScore;
             if (targetScore >= currentScore)
             {
-                finalScore = currentScore;
+                finalScore = targetScore;
             }
 
             return finalScore;

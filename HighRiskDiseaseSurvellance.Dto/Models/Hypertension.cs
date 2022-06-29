@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Text.Json.Serialization;
 
 namespace HighRiskDiseaseSurvellance.Dto.Models
@@ -158,53 +159,50 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
                                  {
                                      1 => this.TryUpdateScore(80, basicScore),
                                      2 => this.TryUpdateScore(90, basicScore),
-                                     3 => this.TryUpdateScore(90, basicScore),
+                                     3 => this.TryUpdateScore(95, basicScore),
                                      _ => basicScore
                                  };
                 }
             }
 
-            if (ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank > 0)
+            if (Sbp is >= 130 and <= 139 || Dbp is >= 85 and <= 89)
             {
-                if (Sbp is >= 130 and <= 139 || Dbp is >= 85 and <= 89)
-                {
-                    basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
-                                 {
-                                     1 => this.TryUpdateScore(76, basicScore),
-                                     2 => this.TryUpdateScore(85, basicScore),
-                                     _ => this.TryUpdateScore(85, basicScore)
-                                 };
-                }
+                basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
+                             {
+                                 0 => basicScore,
+                                 1 => this.TryUpdateScore(76, basicScore),
+                                 _ => this.TryUpdateScore(85, basicScore)
+                             };
+            }
 
-                if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
-                {
-                    basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
-                                 {
-                                     1 => this.TryUpdateScore(90, basicScore),
-                                     2 => this.TryUpdateScore(95, basicScore),
-                                     _ => this.TryUpdateScore(95, basicScore)
-                                 };
-                }
+            if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
+            {
+                basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
+                             {
+                                 0 => basicScore,
+                                 1 => this.TryUpdateScore(85, basicScore),
+                                 _ => this.TryUpdateScore(90, basicScore)
+                             };
+            }
 
-                if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)
-                {
-                    basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
-                                 {
-                                     1 => this.TryUpdateScore(90, basicScore),
-                                     2 => this.TryUpdateScore(95, basicScore),
-                                     _ => this.TryUpdateScore(95, basicScore)
-                                 };
-                }
+            if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)
+            {
+                basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
+                             {
+                                 0 => basicScore,
+                                 1 => this.TryUpdateScore(90, basicScore),
+                                 _ => this.TryUpdateScore(95, basicScore)
+                             };
+            }
 
-                if (Sbp >= 180 || Dbp >= 110)
-                {
-                    basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
-                                 {
-                                     1 => this.TryUpdateScore(90, basicScore),
-                                     2 => this.TryUpdateScore(95, basicScore),
-                                     _ => this.TryUpdateScore(95, basicScore)
-                                 };
-                }
+            if (Sbp >= 180 || Dbp >= 110)
+            {
+                basicScore = ConcomitantClinicalDisorders.ConcomitantClinicalDisordersRank switch
+                             {
+                                 0 => basicScore,
+                                 1 => this.TryUpdateScore(95, basicScore),
+                                 _ => this.TryUpdateScore(98, basicScore)
+                             };
             }
 
             if (BasicRank >= 3)
@@ -325,24 +323,50 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
 
             if (ConcomitantClinicalDisorders.Diabetes)
             {
-                if (Sbp is >= 130 and <= 139 || Dbp is >= 85 and <= 99)
+                if (ConcomitantClinicalDisorders.DiabetesDisordersRank == 0)
                 {
-                    basicScore = this.TryUpdateScore(55, basicScore);
+                    if (Sbp is >= 130 and <= 139 || Dbp is >= 85 and <= 99)
+                    {
+                        basicScore = this.TryUpdateScore(50, basicScore);
+                    }
+
+                    if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
+                    {
+                        basicScore = this.TryUpdateScore(60, basicScore);
+                    }
+
+                    if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)
+                    {
+                        basicScore = this.TryUpdateScore(70, basicScore);
+                    }
+
+                    if (Sbp >= 180 || Dbp >= 110)
+                    {
+                        basicScore = this.TryUpdateScore(80, basicScore);
+                    }
                 }
 
-                if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
+                if (ConcomitantClinicalDisorders.DiabetesDisordersRank > 0)
                 {
-                    basicScore = this.TryUpdateScore(60, basicScore);
-                }
+                    if (Sbp is >= 130 and <= 139 || Dbp is >= 85 and <= 99)
+                    {
+                        basicScore = this.TryUpdateScore(80, basicScore);
+                    }
 
-                if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)
-                {
-                    basicScore = this.TryUpdateScore(70, basicScore);
-                }
+                    if (Sbp is >= 140 and <= 159 || Dbp is >= 90 and <= 99)
+                    {
+                        basicScore = this.TryUpdateScore(90, basicScore);
+                    }
 
-                if (Sbp >= 180 || Dbp >= 110)
-                {
-                    basicScore = this.TryUpdateScore(90, basicScore);
+                    if (Sbp is >= 160 and <= 179 || Dbp is >= 100 and <= 109)
+                    {
+                        basicScore = this.TryUpdateScore(95, basicScore);
+                    }
+
+                    if (Sbp >= 180 || Dbp >= 110)
+                    {
+                        basicScore = this.TryUpdateScore(98, basicScore);
+                    }
                 }
             }
 
@@ -428,19 +452,19 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         public bool CongestiveHeartFailure { get; set; }
 
         /// <summary>
+        /// 心房颤动
+        /// </summary>
+        [JsonPropertyName("atrialFibrillation")]
+        public bool AtrialFibrillation { get; set; }
+
+        /// <summary>
         /// 糖尿病肾病
         /// </summary>
         [JsonPropertyName("diabeticNephropathy")]
         public bool DiabeticNephropathy { get; set; }
 
         /// <summary>
-        /// 肾功能受损
-        /// </summary>
-        [JsonPropertyName("impairedRenalFunction")]
-        public bool ImpairedRenalFunction { get; set; }
-
-        /// <summary>
-        /// 血肌酐升高 > 177ummol/L
+        /// 血肌酐（Cr）升高（男性>133umol/L ,女性>124umol/L)
         /// </summary>
         [JsonPropertyName("elevatedSerumCreatinine")]
         public bool ElevatedSerumCreatinine { get; set; }
@@ -458,10 +482,28 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         public bool PeripheralVascularDisease { get; set; }
 
         /// <summary>
-        /// 重度高血压性视网膜病变
+        /// 视网膜出血、渗出或水肿
         /// </summary>
         [JsonPropertyName("severeHypertensiveRetinopathy")]
         public bool SevereHypertensiveRetinopathy { get; set; }
+
+        /// <summary>
+        /// 空腹血糖≥7.0mmol/L
+        /// </summary>
+        [JsonPropertyName("fastingBloodGlucose")]
+        public bool FastingBloodGlucose { get; set; }
+
+        /// <summary>
+        /// 餐后2小时血糖≥11.1mmol/L
+        /// </summary>
+        [JsonPropertyName("bloodGlucose2HoursAfterAMeal")]
+        public bool BloodGlucose2HoursAfterAMeal { get; set; }
+
+        /// <summary>
+        /// 糖化血红蛋白≥6.5%
+        /// </summary>
+        [JsonPropertyName("glycosylatedHemoglobin")]
+        public bool GlycosylatedHemoglobin { get; set; }
 
         /// <summary>
         /// 糖尿病
@@ -491,16 +533,45 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
                     if (Angina) _concomitantClinicalDisordersRank                                          += 1;
                     if (HistoryOfCoronaryBloodCirculationReconstruction) _concomitantClinicalDisordersRank += 1;
                     if (CongestiveHeartFailure) _concomitantClinicalDisordersRank                          += 1;
+                    if (AtrialFibrillation) _concomitantClinicalDisordersRank                              += 1;
                     if (DiabeticNephropathy) _concomitantClinicalDisordersRank                             += 1;
-                    if (ImpairedRenalFunction) _concomitantClinicalDisordersRank                           += 1;
                     if (ElevatedSerumCreatinine) _concomitantClinicalDisordersRank                         += 1;
                     if (AorticDissection) _concomitantClinicalDisordersRank                                += 1;
                     if (PeripheralVascularDisease) _concomitantClinicalDisordersRank                       += 1;
                     if (SevereHypertensiveRetinopathy) _concomitantClinicalDisordersRank                   += 1;
-                    if (Diabetes) _concomitantClinicalDisordersRank                                        += 1;
+                    if (FastingBloodGlucose) _concomitantClinicalDisordersRank                             += 1;
+                    if (BloodGlucose2HoursAfterAMeal) _concomitantClinicalDisordersRank                    += 1;
+                    if (GlycosylatedHemoglobin) _concomitantClinicalDisordersRank                          += 1;
                 }
 
                 return _concomitantClinicalDisordersRank.Value;
+            }
+        }
+
+        private int? _diabetesDisordersRank = null;
+
+        public int DiabetesDisordersRank {
+            get
+            {
+                if (_diabetesDisordersRank == null)
+                {
+                    _diabetesDisordersRank = 0;
+                    if (CerebralHaemorrhage) _diabetesDisordersRank                             += 1;
+                    if (IschemicStroke) _diabetesDisordersRank                                  += 1;
+                    if (TransientIschemicAttack) _diabetesDisordersRank                         += 1;
+                    if (HistoryOfMyocardialInfarction) _diabetesDisordersRank                   += 1;
+                    if (Angina) _diabetesDisordersRank                                          += 1;
+                    if (HistoryOfCoronaryBloodCirculationReconstruction) _diabetesDisordersRank += 1;
+                    if (CongestiveHeartFailure) _diabetesDisordersRank                          += 1;
+                    if (AtrialFibrillation) _diabetesDisordersRank                              += 1;
+                    if (DiabeticNephropathy) _diabetesDisordersRank                             += 1;
+                    if (ElevatedSerumCreatinine) _diabetesDisordersRank                         += 1;
+                    if (AorticDissection) _diabetesDisordersRank                                += 1;
+                    if (PeripheralVascularDisease) _diabetesDisordersRank                       += 1;
+                    if (SevereHypertensiveRetinopathy) _diabetesDisordersRank                   += 1;
+                }
+
+                return _diabetesDisordersRank.Value;
             }
         }
     }
