@@ -156,6 +156,11 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                         {
                             NumberHandling = JsonNumberHandling.AllowReadingFromString
                         } );
+                case SurveillanceNames.Atherosclerosis:
+                    return JsonSerializer.Deserialize<Atherosclerosis>(content, new JsonSerializerOptions
+                                                                                {
+                                                                                    NumberHandling = JsonNumberHandling.AllowReadingFromString
+                                                                                } );
                 default : return null;
             }
         }

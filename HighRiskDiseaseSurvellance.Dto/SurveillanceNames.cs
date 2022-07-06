@@ -12,6 +12,7 @@ namespace HighRiskDiseaseSurvellance.Dto
         public const string CardiacInsufficiency       = nameof(CardiacInsufficiency);
         public const string AtrialFibrillationBleeding = nameof(AtrialFibrillationBleeding);
         public const string AtrialFibrillationIschemia = nameof(AtrialFibrillationIschemia);
+        public const string Atherosclerosis            = nameof(Atherosclerosis);
 
         static SurveillanceNames()
         {
@@ -21,6 +22,7 @@ namespace HighRiskDiseaseSurvellance.Dto
             SurveillanceTypeNames.Add(CardiacInsufficiency, "心功能严重分级");
             SurveillanceTypeNames.Add(AtrialFibrillationBleeding, "房颤出血风险分级");
             SurveillanceTypeNames.Add(AtrialFibrillationIschemia, "房颤缺血风险分级");
+            SurveillanceTypeNames.Add(Atherosclerosis, "10年内发生动脉粥样硬化性心血管病（ASCVD）危险评估");
         }
 
         public static string GetSurveillanceTypeName(string type)

@@ -98,10 +98,22 @@ public class AbnormalLiverFunction
     public bool ChronicLiverDisease { get; set; }
     
     /// <summary>
-    /// 胆红素>2倍且谷草转氨酶/谷丙转氨酶/碱性磷酸酶>3倍
+    /// 胆红素（TB IL）>35μmol/L且谷草转氨酶（AS T）>120 U/L
     /// </summary>
-    [JsonPropertyName("bilirubin")]
-    public bool Bilirubin           { get; set; }
+    [JsonPropertyName("bilirubinOne")]
+    public bool BilirubinOne { get; set; }
+
+    /// <summary>
+    /// 胆红素（TB IL）>35μmol/L且谷丙转氨酶（ALT）>120 U/L(男），>105U/L(女）
+    /// </summary>
+    [JsonPropertyName("bilirubinTwo")]
+    public bool BilirubinTwo { get; set; }
+
+    /// <summary>
+    /// 胆红素（TB IL）>35μmol/L且碱性磷酸酶（ALP）>360 U/L(男），>390 U/L(女）
+    /// </summary>
+    [JsonPropertyName("bilirubinThree")]
+    public bool BilirubinThree { get; set; }
 
     /// <summary>
     /// 以上皆无
@@ -113,8 +125,10 @@ public class AbnormalLiverFunction
     {
         var score                      = 0.0m;
         if (ChronicLiverDisease) score += 1;
-        if (Bilirubin) score           += 1;
-        if(score > 1) score = 1;
+        if (BilirubinOne) score        += 1;
+        if (BilirubinTwo) score        += 1;
+        if (BilirubinThree) score      += 1;
+        if(score > 1) score            =  1;
         return score;
     }
 }
@@ -195,19 +209,13 @@ public class Bleeding
 public class Drugs
 {
     /// <summary>
-    /// 抗血小板药物
+    /// 正在使用抗血小板药物或非甾体类药物
     /// </summary>
     [JsonPropertyName("antiplateletDrugs")]
     public bool AntiplateletDrugs { get; set; }
     
     /// <summary>
-    /// 非甾体类药物
-    /// </summary>
-    [JsonPropertyName("nonsteroidalDrugs")]
-    public bool NonsteroidalDrugs { get; set; }
-    
-    /// <summary>
-    /// 嗜酒
+    /// 嗜酒（每周饮酒至少2次，每次至少白酒200 ml）
     /// </summary>
     [JsonPropertyName("alcoholism")]
     public bool Alcoholism        { get; set; }
@@ -222,9 +230,7 @@ public class Drugs
     {
         var score                    = 0.0m;
         if (AntiplateletDrugs) score += 1;
-        if (NonsteroidalDrugs) score += 1;
         if (Alcoholism) score        += 1;
-        if(score > 1) score = 1;
         return score;
     }
 }
@@ -261,6 +267,7 @@ public class InrUnstable
         if (Volatile) score   += 1;
         if (High) score       += 1;
         if (OutOfRange) score += 1;
+        if(score > 1) score   =  1;
         return score;
     }
 }

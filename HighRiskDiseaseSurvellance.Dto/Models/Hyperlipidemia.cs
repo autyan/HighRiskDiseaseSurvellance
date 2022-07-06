@@ -124,14 +124,24 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
             //高危5
             if ((Tc is >= 4.1 and < 5.2 || (Ldlc is >= 2.6 and < 3.4 && BasicDisease.Hypertension)))
             {
-                basicScore = this.TryUpdateScore(RiskPoint >= 2 ? 70 : 0, basicScore);
+                basicScore = RiskPoint switch
+                             {
+                                 2 => this.TryUpdateScore(65, basicScore),
+                                 3 => this.TryUpdateScore(70, basicScore),
+                                 _ => basicScore
+                             };
             }
 
             //高危6
             if ((Tc is >= 5.2 and < 7.2 || (Ldlc is >= 3.4 and < 4.9 && BasicDisease.Hypertension)))
             {
 
-                basicScore = this.TryUpdateScore(RiskPoint >= 2 ? 74 : 0, basicScore);
+                basicScore = RiskPoint switch
+                             {
+                                 2 => this.TryUpdateScore(70, basicScore),
+                                 3 => this.TryUpdateScore(74, basicScore),
+                                 _ => basicScore
+                             };
             }
 
             return basicScore;
@@ -146,19 +156,19 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
             //中危1
             if (((Tc is >= 3.1 and < 4.1) || (Ldlc is >= 1.8 and < 2.6 && BasicDisease.Hypertension)))
             {
-                basicScore = this.TryUpdateScore(RiskPoint >= 2 ? 30 : 0, basicScore);
+                basicScore = this.TryUpdateScore(RiskPoint == 2 ? 30 : 0, basicScore);
             }
 
             //中危2
             if (((Tc is >= 4.1 and < 5.2) || (Ldlc is >= 2.6 and < 3.4 && BasicDisease.Hypertension)))
             {
-                basicScore = this.TryUpdateScore(RiskPoint >= 1 ? 35 : 0, basicScore);
+                basicScore = this.TryUpdateScore(RiskPoint == 1 ? 35 : 0, basicScore);
             }
 
             //中危3
             if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 3.4 and < 4.9 && BasicDisease.Hypertension)))
             {
-                basicScore = this.TryUpdateScore(RiskPoint >= 1 ? 45 : 0, basicScore);
+                basicScore = this.TryUpdateScore(RiskPoint == 1 ? 45 : 0, basicScore);
             }
 
             //中危4
@@ -175,7 +185,7 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
             //中危5
             if (((Tc is >= 5.2 and < 7.2) || (Ldlc is >= 2.6 and < 3.4 && !BasicDisease.Hypertension)))
             {
-                basicScore = this.TryUpdateScore(RiskPoint >= 3 ? 40 : 0, basicScore);
+                basicScore = this.TryUpdateScore(RiskPoint == 3 ? 40 : 0, basicScore);
             }
 
             if (basicScore >= 25 && Age < 55)
@@ -338,6 +348,12 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
         public bool AcuteMyocardialInfarction { get; set; }
 
         /// <summary>
+        /// 不稳定性心绞痛
+        /// </summary>
+        [JsonPropertyName("unstableAngina")]
+        public bool UnstableAngina { get; set; }
+
+        /// <summary>
         /// 稳定性冠心病
         /// </summary>
         [JsonPropertyName("stableCoronaryHeartDisease")]
@@ -402,6 +418,7 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
             var basicScore = 0.0m;
 
             if (AcuteMyocardialInfarction) basicScore     += 3;
+            if (UnstableAngina) basicScore                += 3;
             if (StableCoronaryHeartDisease) basicScore    += 3;
             if (AfterRevascularization) basicScore        += 3;
             if (IschemicCardiomyopathy) basicScore        += 3;
