@@ -18,8 +18,7 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
 
         public decimal Compute()
         {
-            var basicScore = 0.0m;
-            basicScore = CasualActivity.Compute();
+            var basicScore = CasualActivity.Compute();
             if(basicScore > 0) return basicScore;
 
             basicScore = NormalActivity.Compute();
@@ -68,45 +67,22 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
 
     public decimal Compute()
     {
+        var heavyActivatyRatre                            = 0;
+        if (MountainClimbingWithHeavy) heavyActivatyRatre += 1;
+        if (BasketBall) heavyActivatyRatre                += 1;
+        if (MountainClimbing) heavyActivatyRatre          += 1;
+        if (FootBall) heavyActivatyRatre                  += 1;
+
         var basicScore = 0;
 
-        if (MountainClimbingWithHeavy)
-        {
-            basicScore += 10;
-        }
-        else
-        {
-            basicScore -= 5;
-        }
-
-        if (BasketBall)
-        {
-            basicScore += 10;
-        }
-        else
-        {
-            basicScore -= 5;
-        }
-
-        if (MountainClimbing)
-        {
-            basicScore += 10;
-        }
-        else
-        {
-            basicScore -= 5;
-        }
-
-        if (FootBall)
-        {
-            basicScore += 10;
-        }
-        else
-        {
-            basicScore -= 5;
-        }
-
-        basicScore += 20;
+        basicScore = heavyActivatyRatre switch
+                     {
+                         1 => 6,
+                         2 => 12,
+                         3 => 18,
+                         4 => 24,
+                         _ => basicScore
+                     };
 
         return basicScore;
     }
@@ -141,36 +117,20 @@ public class HardActivity
 
     public decimal Compute()
     {
+        var hardActivityRate               = 0;
+        if (WalkWithLoad) hardActivityRate += 1;
+        if (Weeding) hardActivityRate      += 1;
+        if (Riding) hardActivityRate       += 1;
+
         var basicScore = 0;
 
-        if (WalkWithLoad)
-        {
-            basicScore += 10;
-        }
-        else
-        {
-            basicScore -= 5;
-        }
-
-        if (Weeding)
-        {
-            basicScore += 10;
-        }
-        else
-        {
-            basicScore -= 5;
-        }
-
-        if (Riding)
-        {
-            basicScore += 10;
-        }
-        else
-        {
-            basicScore -= 5;
-        }
-
-        if (basicScore > 0) basicScore += 40;
+        basicScore = hardActivityRate switch
+                     {
+                         1 => 33,
+                         2 => 41,
+                         3 => 49,
+                         _ => basicScore
+                     };
 
         return basicScore;
     }
@@ -204,36 +164,20 @@ public class NormalActivityCardiac
 
     public decimal Compute()
     {
-        var basicScore = 0;
+        var normalActivityRate = 0;
 
-        if (WalkOnWater)
-        {
-            basicScore += 10;
-        }
-        else
-        {
-            basicScore -= 5;
-        }
+        if (WalkOnWater) normalActivityRate += 1;
+        if (HouseClean) normalActivityRate  += 1;
+        if (BabySet) normalActivityRate     += 1;
+        var basicScore                      = 0.0m;
 
-        if (HouseClean)
-        {
-            basicScore += 10;
-        }
-        else
-        {
-            basicScore -= 5;
-        }
-
-        if (BabySet)
-        {
-            basicScore += 10;
-        }
-        else
-        {
-            basicScore -= 5;
-        }
-
-        if (basicScore > 0) basicScore += 70;
+        basicScore = normalActivityRate switch
+                     {
+                         1 => 58,
+                         2 => 66,
+                         3 => 74,
+                         _ => basicScore
+                     };
 
         return basicScore;
     }
@@ -254,22 +198,22 @@ public class CasualActivityCardiac
     public bool Resting { get; set; }
 
     /// <summary>
-    /// 血压 小于 90/60mmHg
+    /// 休息时有症状且血压（BP）&lt;90/60 mmHg）
     /// </summary>
-    [JsonPropertyName("bloodPressurePoor")]
-    public bool BloodPressurePoor { get; set; }
+    [JsonPropertyName("restingWithBp")]
+    public bool RestingWithBp { get; set; }
 
     /// <summary>
-    /// 血压 90-120/60-70mmHg
+    /// 休息时有症状且收缩压(90-120)/舒张压（60-70） mmHg）
     /// </summary>
-    [JsonPropertyName("bloodPressureLow")]
-    public bool BloodPressureLow { get; set; }
+    [JsonPropertyName("restingWithDbpOrSbp")]
+    public bool RestingWithDbpOrSbp { get; set; }
 
     /// <summary>
-    /// 需要静脉给药
+    /// 休息时有症状且需要静脉用药
     /// </summary>
-    [JsonPropertyName("intravenousInjection")]
-    public bool IntravenousInjection { get; set; }
+    [JsonPropertyName("restingWithDrug")]
+    public bool RestingWithDrug { get; set; }
 
     /// <summary>
     /// 以上皆无
@@ -281,13 +225,11 @@ public class CasualActivityCardiac
     {
         var basicScore = 0;
 
-        if (Resting) basicScore              += 80;
-        if (LayOff) basicScore               += 10;
-        if (BloodPressurePoor) basicScore    += 20;
-        if (BloodPressureLow) basicScore     += 10;
-        if (IntravenousInjection) basicScore += 15;
-
-        if (basicScore >= 80) basicScore += 75;
+        if (LayOff) basicScore              = 80;
+        if (Resting) basicScore             = 90;
+        if (RestingWithDbpOrSbp) basicScore = 90;
+        if (RestingWithDrug) basicScore     = 90;
+        if (RestingWithBp) basicScore       = 95;
 
         return basicScore;
     }
