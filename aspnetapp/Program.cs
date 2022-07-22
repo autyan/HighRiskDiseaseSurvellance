@@ -55,6 +55,7 @@ try
     builder.Services.AddSingleton<ITokenProvider, JwtTokenProvider>();
     if (builder.Environment.IsDevelopment())
     {
+        logger.Info($"enter development");
         var jwtSection = builder.Configuration.GetSection("jwt");
         builder.Services.Configure<JwtOptions>(jwtSection);
         issuer     = jwtSection.GetValue<string>(nameof(JwtOptions.Issuer));
