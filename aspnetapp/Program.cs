@@ -76,6 +76,7 @@ try
         issuer     = Environment.GetEnvironmentVariable("JWT_ISSUER");
         audience   = Environment.GetEnvironmentVariable("JWT_AUDIENCE");
         signingKey = Environment.GetEnvironmentVariable("JWT_SIGNINGKEY");
+        logger.Info($"issuser:{issuer}, audience :{audience}, signingKey:{signingKey}");
     }
     
     builder.Services.AddAuthentication(options =>
