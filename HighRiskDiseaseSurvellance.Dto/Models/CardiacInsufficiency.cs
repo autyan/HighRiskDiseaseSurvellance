@@ -34,7 +34,7 @@ namespace HighRiskDiseaseSurvellance.Dto.Models
     }
 
     public class HeavyActivity
-{
+    {
     /// <summary>
     /// 负重爬山
     /// </summary>

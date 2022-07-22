@@ -27,7 +27,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HighRiskDiseaseSurvellance.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HighRiskDiseaseSurvellance.Aplication", "HighRiskDiseaseSurvellance.Aplication\HighRiskDiseaseSurvellance.Aplication.csproj", "{3D541BB0-D94D-4F91-A183-8F2EC9A677D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HighRiskDiseaseSurvellance.Infrastructure", "HighRiskDiseaseSurvellance.Infrastructure\HighRiskDiseaseSurvellance.Infrastructure.csproj", "{5B393940-24A6-40F7-9AFD-C60C09F050B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HighRiskDiseaseSurvellance.Infrastructure", "HighRiskDiseaseSurvellance.Infrastructure\HighRiskDiseaseSurvellance.Infrastructure.csproj", "{5B393940-24A6-40F7-9AFD-C60C09F050B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HighRiskDiseaseSurvellance.WeChatPay", "HighRiskDiseaseSurvellance.WeChatPay\HighRiskDiseaseSurvellance.WeChatPay.csproj", "{A7E78F31-82BA-438F-A359-51F28564C49B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +125,18 @@ Global
 		{5B393940-24A6-40F7-9AFD-C60C09F050B7}.Release|x64.Build.0 = Release|Any CPU
 		{5B393940-24A6-40F7-9AFD-C60C09F050B7}.Release|x86.ActiveCfg = Release|Any CPU
 		{5B393940-24A6-40F7-9AFD-C60C09F050B7}.Release|x86.Build.0 = Release|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Debug|x64.Build.0 = Debug|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Debug|x86.Build.0 = Debug|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Release|x64.ActiveCfg = Release|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Release|x64.Build.0 = Release|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Release|x86.ActiveCfg = Release|Any CPU
+		{A7E78F31-82BA-438F-A359-51F28564C49B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
