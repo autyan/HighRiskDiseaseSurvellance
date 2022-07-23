@@ -134,5 +134,16 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                        HasSyncWeChatUserProfile = user.HasSyncWeChatUserProfile
                    };
         }
+
+        public async Task<string> GetDistributorQrCode(string userId)
+        {
+            var user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            if (user == null)
+            {
+                throw new DomainException(ErrorCode.UserNotFound);
+            }
+
+            return user.DistributorQrCode;
+        }
     }
 }

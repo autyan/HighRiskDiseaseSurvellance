@@ -45,5 +45,11 @@ namespace aspnetapp.Controllers.Api
             request.Id = UserId;
             return _userService.SyncWeChatProfileAsync(request);
         }
+
+        [HttpGet("DistributorQrCode")]
+        public Task<string> GetDistributorQrCode()
+        {
+            return _userService.GetDistributorQrCode(UserId);
+        }
     }
 }
