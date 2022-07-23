@@ -135,7 +135,7 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
                    };
         }
 
-        public async Task<string> GetDistributorQrCode(string userId)
+        public async Task<string> GetDistributorQrCodeAsync(string userId)
         {
             var user = await DbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
             if (user == null)
@@ -144,6 +144,24 @@ namespace HighRiskDiseaseSurvellance.Aplication.Services
             }
 
             return user.DistributorQrCode;
+        }
+
+        public async Task<bool> BindDistributorAsync(BindDistributorRequest request)
+        {
+            var user = await DbContext.Users.FirstOrDefaultAsync(u => u.WeChatOpenId == request.UserId);
+            if (user == null)
+            {
+                throw new DomainException(ErrorCode.UserNotFound);
+            }
+
+            if (string.IsNullOrWhiteSpace(user.DistributorId) && !string.IsNullOrWhiteSpace(request.DistributorId))
+            {
+                user.SetDistributor(request.DistributorId);
+            }
+
+            await DbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }

@@ -49,7 +49,14 @@ namespace aspnetapp.Controllers.Api
         [HttpGet("DistributorQrCode")]
         public Task<string> GetDistributorQrCode()
         {
-            return _userService.GetDistributorQrCode(UserId);
+            return _userService.GetDistributorQrCodeAsync(UserId);
+        }
+
+        [HttpPost("BindDistributor")]
+        public Task<bool> BindDistributor([FromBody] BindDistributorRequest request)
+        {
+            request.UserId = UserId;
+            return _userService.BindDistributorAsync(request);
         }
     }
 }
